@@ -33,6 +33,7 @@ export default function Home(props) {
     variables: {},
     data: props.data,
   });
+  console.log(data);
 
   const content = data.getPagesDocument.data;
   return <pre>{JSON.stringify(content, null, 2)}</pre>;
