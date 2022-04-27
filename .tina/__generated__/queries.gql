@@ -1,5 +1,5 @@
-query getPageDocument($relativePath: String!) {
-  getPageDocument(relativePath: $relativePath) {
+query getPagesDocument($relativePath: String!) {
+  getPagesDocument(relativePath: $relativePath) {
     sys {
       filename
       basename
@@ -10,13 +10,13 @@ query getPageDocument($relativePath: String!) {
     }
     id
     data {
-      ...PageParts
+      ...PagesParts
     }
   }
 }
 
-query getPageList {
-  getPageList {
+query getPagesList {
+  getPagesList {
     totalCount
     edges {
       node {
@@ -30,15 +30,15 @@ query getPageList {
           extension
         }
         data {
-          ...PageParts
+          ...PagesParts
         }
       }
     }
   }
 }
 
-query getPostDocument($relativePath: String!) {
-  getPostDocument(relativePath: $relativePath) {
+query getColoursDocument($relativePath: String!) {
+  getColoursDocument(relativePath: $relativePath) {
     sys {
       filename
       basename
@@ -49,13 +49,13 @@ query getPostDocument($relativePath: String!) {
     }
     id
     data {
-      ...PostParts
+      ...ColoursParts
     }
   }
 }
 
-query getPostList {
-  getPostList {
+query getColoursList {
+  getColoursList {
     totalCount
     edges {
       node {
@@ -69,7 +69,7 @@ query getPostList {
           extension
         }
         data {
-          ...PostParts
+          ...ColoursParts
         }
       }
     }

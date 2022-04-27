@@ -61,16 +61,22 @@ export type Connection = {
 
 export type Query = {
   __typename?: 'Query';
+  getOptimizedQuery?: Maybe<Scalars['String']>;
   getCollection: Collection;
   getCollections: Array<Collection>;
   node: Node;
   getDocument: DocumentNode;
   getDocumentList: DocumentConnection;
   getDocumentFields: Scalars['JSON'];
-  getPageDocument: PageDocument;
-  getPageList: PageConnection;
-  getPostDocument: PostDocument;
-  getPostList: PostConnection;
+  getPagesDocument: PagesDocument;
+  getPagesList: PagesConnection;
+  getColoursDocument: ColoursDocument;
+  getColoursList: ColoursConnection;
+};
+
+
+export type QueryGetOptimizedQueryArgs = {
+  queryString: Scalars['String'];
 };
 
 
@@ -95,32 +101,35 @@ export type QueryGetDocumentListArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Float']>;
   last?: InputMaybe<Scalars['Float']>;
+  sort?: InputMaybe<Scalars['String']>;
 };
 
 
-export type QueryGetPageDocumentArgs = {
+export type QueryGetPagesDocumentArgs = {
   relativePath?: InputMaybe<Scalars['String']>;
 };
 
 
-export type QueryGetPageListArgs = {
+export type QueryGetPagesListArgs = {
   before?: InputMaybe<Scalars['String']>;
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Float']>;
   last?: InputMaybe<Scalars['Float']>;
+  sort?: InputMaybe<Scalars['String']>;
 };
 
 
-export type QueryGetPostDocumentArgs = {
+export type QueryGetColoursDocumentArgs = {
   relativePath?: InputMaybe<Scalars['String']>;
 };
 
 
-export type QueryGetPostListArgs = {
+export type QueryGetColoursListArgs = {
   before?: InputMaybe<Scalars['String']>;
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Float']>;
   last?: InputMaybe<Scalars['Float']>;
+  sort?: InputMaybe<Scalars['String']>;
 };
 
 export type DocumentConnectionEdges = {
@@ -155,76 +164,81 @@ export type CollectionDocumentsArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Float']>;
   last?: InputMaybe<Scalars['Float']>;
+  sort?: InputMaybe<Scalars['String']>;
 };
 
-export type DocumentNode = PageDocument | PostDocument;
+export type DocumentNode = PagesDocument | ColoursDocument;
 
-export type Page = {
-  __typename?: 'Page';
-  body?: Maybe<Scalars['JSON']>;
-};
+export type PagesBackgroundColourReferenceDocument = ColoursDocument;
 
-export type PageDocument = Node & Document & {
-  __typename?: 'PageDocument';
-  id: Scalars['ID'];
-  sys: SystemInfo;
-  data: Page;
-  form: Scalars['JSON'];
-  values: Scalars['JSON'];
-  dataJSON: Scalars['JSON'];
-};
-
-export type PageConnectionEdges = {
-  __typename?: 'PageConnectionEdges';
-  cursor?: Maybe<Scalars['String']>;
-  node?: Maybe<PageDocument>;
-};
-
-export type PageConnection = Connection & {
-  __typename?: 'PageConnection';
-  pageInfo?: Maybe<PageInfo>;
-  totalCount: Scalars['Float'];
-  edges?: Maybe<Array<Maybe<PageConnectionEdges>>>;
-};
-
-export type Post = {
-  __typename?: 'Post';
+export type Pages = {
+  __typename?: 'Pages';
   title?: Maybe<Scalars['String']>;
-  body?: Maybe<Scalars['String']>;
+  backgroundColourReference?: Maybe<PagesBackgroundColourReferenceDocument>;
+  backgroundColourDropdown?: Maybe<Scalars['String']>;
 };
 
-export type PostDocument = Node & Document & {
-  __typename?: 'PostDocument';
+export type PagesDocument = Node & Document & {
+  __typename?: 'PagesDocument';
   id: Scalars['ID'];
   sys: SystemInfo;
-  data: Post;
+  data: Pages;
   form: Scalars['JSON'];
   values: Scalars['JSON'];
   dataJSON: Scalars['JSON'];
 };
 
-export type PostConnectionEdges = {
-  __typename?: 'PostConnectionEdges';
+export type PagesConnectionEdges = {
+  __typename?: 'PagesConnectionEdges';
   cursor?: Maybe<Scalars['String']>;
-  node?: Maybe<PostDocument>;
+  node?: Maybe<PagesDocument>;
 };
 
-export type PostConnection = Connection & {
-  __typename?: 'PostConnection';
+export type PagesConnection = Connection & {
+  __typename?: 'PagesConnection';
   pageInfo?: Maybe<PageInfo>;
   totalCount: Scalars['Float'];
-  edges?: Maybe<Array<Maybe<PostConnectionEdges>>>;
+  edges?: Maybe<Array<Maybe<PagesConnectionEdges>>>;
+};
+
+export type Colours = {
+  __typename?: 'Colours';
+  rgbColour?: Maybe<Scalars['String']>;
+};
+
+export type ColoursDocument = Node & Document & {
+  __typename?: 'ColoursDocument';
+  id: Scalars['ID'];
+  sys: SystemInfo;
+  data: Colours;
+  form: Scalars['JSON'];
+  values: Scalars['JSON'];
+  dataJSON: Scalars['JSON'];
+};
+
+export type ColoursConnectionEdges = {
+  __typename?: 'ColoursConnectionEdges';
+  cursor?: Maybe<Scalars['String']>;
+  node?: Maybe<ColoursDocument>;
+};
+
+export type ColoursConnection = Connection & {
+  __typename?: 'ColoursConnection';
+  pageInfo?: Maybe<PageInfo>;
+  totalCount: Scalars['Float'];
+  edges?: Maybe<Array<Maybe<ColoursConnectionEdges>>>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   addPendingDocument: DocumentNode;
   updateDocument: DocumentNode;
+  deleteDocument: DocumentNode;
   createDocument: DocumentNode;
-  updatePageDocument: PageDocument;
-  createPageDocument: PageDocument;
-  updatePostDocument: PostDocument;
-  createPostDocument: PostDocument;
+  updatePagesDocument: PagesDocument;
+  createPagesDocument: PagesDocument;
+  updateColoursDocument: ColoursDocument;
+  createColoursDocument: ColoursDocument;
 };
 
 
@@ -242,6 +256,12 @@ export type MutationUpdateDocumentArgs = {
 };
 
 
+export type MutationDeleteDocumentArgs = {
+  collection?: InputMaybe<Scalars['String']>;
+  relativePath: Scalars['String'];
+};
+
+
 export type MutationCreateDocumentArgs = {
   collection?: InputMaybe<Scalars['String']>;
   relativePath: Scalars['String'];
@@ -249,85 +269,91 @@ export type MutationCreateDocumentArgs = {
 };
 
 
-export type MutationUpdatePageDocumentArgs = {
+export type MutationUpdatePagesDocumentArgs = {
   relativePath: Scalars['String'];
-  params: PageMutation;
+  params: PagesMutation;
 };
 
 
-export type MutationCreatePageDocumentArgs = {
+export type MutationCreatePagesDocumentArgs = {
   relativePath: Scalars['String'];
-  params: PageMutation;
+  params: PagesMutation;
 };
 
 
-export type MutationUpdatePostDocumentArgs = {
+export type MutationUpdateColoursDocumentArgs = {
   relativePath: Scalars['String'];
-  params: PostMutation;
+  params: ColoursMutation;
 };
 
 
-export type MutationCreatePostDocumentArgs = {
+export type MutationCreateColoursDocumentArgs = {
   relativePath: Scalars['String'];
-  params: PostMutation;
+  params: ColoursMutation;
 };
 
 export type DocumentMutation = {
-  page?: InputMaybe<PageMutation>;
-  post?: InputMaybe<PostMutation>;
+  pages?: InputMaybe<PagesMutation>;
+  colours?: InputMaybe<ColoursMutation>;
 };
 
-export type PageMutation = {
-  body?: InputMaybe<Scalars['JSON']>;
-};
-
-export type PostMutation = {
+export type PagesMutation = {
   title?: InputMaybe<Scalars['String']>;
-  body?: InputMaybe<Scalars['String']>;
+  backgroundColourReference?: InputMaybe<Scalars['String']>;
+  backgroundColourDropdown?: InputMaybe<Scalars['String']>;
 };
 
-export type PagePartsFragment = { __typename?: 'Page', body?: any | null | undefined };
+export type ColoursMutation = {
+  rgbColour?: InputMaybe<Scalars['String']>;
+};
 
-export type PostPartsFragment = { __typename?: 'Post', title?: string | null | undefined, body?: string | null | undefined };
+export type PagesPartsFragment = { __typename?: 'Pages', title?: string | null | undefined, backgroundColourDropdown?: string | null | undefined, backgroundColourReference?: { __typename?: 'ColoursDocument', id: string } | null | undefined };
 
-export type GetPageDocumentQueryVariables = Exact<{
+export type ColoursPartsFragment = { __typename?: 'Colours', rgbColour?: string | null | undefined };
+
+export type GetPagesDocumentQueryVariables = Exact<{
   relativePath: Scalars['String'];
 }>;
 
 
-export type GetPageDocumentQuery = { __typename?: 'Query', getPageDocument: { __typename?: 'PageDocument', id: string, sys: { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, data: { __typename?: 'Page', body?: any | null | undefined } } };
+export type GetPagesDocumentQuery = { __typename?: 'Query', getPagesDocument: { __typename?: 'PagesDocument', id: string, sys: { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, data: { __typename?: 'Pages', title?: string | null | undefined, backgroundColourDropdown?: string | null | undefined, backgroundColourReference?: { __typename?: 'ColoursDocument', id: string } | null | undefined } } };
 
-export type GetPageListQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetPagesListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPageListQuery = { __typename?: 'Query', getPageList: { __typename?: 'PageConnection', totalCount: number, edges?: Array<{ __typename?: 'PageConnectionEdges', node?: { __typename?: 'PageDocument', id: string, sys: { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, data: { __typename?: 'Page', body?: any | null | undefined } } | null | undefined } | null | undefined> | null | undefined } };
+export type GetPagesListQuery = { __typename?: 'Query', getPagesList: { __typename?: 'PagesConnection', totalCount: number, edges?: Array<{ __typename?: 'PagesConnectionEdges', node?: { __typename?: 'PagesDocument', id: string, sys: { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, data: { __typename?: 'Pages', title?: string | null | undefined, backgroundColourDropdown?: string | null | undefined, backgroundColourReference?: { __typename?: 'ColoursDocument', id: string } | null | undefined } } | null | undefined } | null | undefined> | null | undefined } };
 
-export type GetPostDocumentQueryVariables = Exact<{
+export type GetColoursDocumentQueryVariables = Exact<{
   relativePath: Scalars['String'];
 }>;
 
 
-export type GetPostDocumentQuery = { __typename?: 'Query', getPostDocument: { __typename?: 'PostDocument', id: string, sys: { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, data: { __typename?: 'Post', title?: string | null | undefined, body?: string | null | undefined } } };
+export type GetColoursDocumentQuery = { __typename?: 'Query', getColoursDocument: { __typename?: 'ColoursDocument', id: string, sys: { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, data: { __typename?: 'Colours', rgbColour?: string | null | undefined } } };
 
-export type GetPostListQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetColoursListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPostListQuery = { __typename?: 'Query', getPostList: { __typename?: 'PostConnection', totalCount: number, edges?: Array<{ __typename?: 'PostConnectionEdges', node?: { __typename?: 'PostDocument', id: string, sys: { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, data: { __typename?: 'Post', title?: string | null | undefined, body?: string | null | undefined } } | null | undefined } | null | undefined> | null | undefined } };
+export type GetColoursListQuery = { __typename?: 'Query', getColoursList: { __typename?: 'ColoursConnection', totalCount: number, edges?: Array<{ __typename?: 'ColoursConnectionEdges', node?: { __typename?: 'ColoursDocument', id: string, sys: { __typename?: 'SystemInfo', filename: string, basename: string, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string }, data: { __typename?: 'Colours', rgbColour?: string | null | undefined } } | null | undefined } | null | undefined> | null | undefined } };
 
-export const PagePartsFragmentDoc = gql`
-    fragment PageParts on Page {
-  body
-}
-    `;
-export const PostPartsFragmentDoc = gql`
-    fragment PostParts on Post {
+export const PagesPartsFragmentDoc = gql`
+    fragment PagesParts on Pages {
   title
-  body
+  backgroundColourReference {
+    ... on Document {
+      id
+    }
+  }
+  backgroundColourDropdown
 }
     `;
-export const GetPageDocumentDocument = gql`
-    query getPageDocument($relativePath: String!) {
-  getPageDocument(relativePath: $relativePath) {
+export const ColoursPartsFragmentDoc = gql`
+    fragment ColoursParts on Colours {
+  rgbColour
+}
+    `;
+export const GetPagesDocumentDocument = gql`
+    query getPagesDocument($relativePath: String!) {
+  getPagesDocument(relativePath: $relativePath) {
     sys {
       filename
       basename
@@ -338,14 +364,14 @@ export const GetPageDocumentDocument = gql`
     }
     id
     data {
-      ...PageParts
+      ...PagesParts
     }
   }
 }
-    ${PagePartsFragmentDoc}`;
-export const GetPageListDocument = gql`
-    query getPageList {
-  getPageList {
+    ${PagesPartsFragmentDoc}`;
+export const GetPagesListDocument = gql`
+    query getPagesList {
+  getPagesList {
     totalCount
     edges {
       node {
@@ -359,16 +385,16 @@ export const GetPageListDocument = gql`
           extension
         }
         data {
-          ...PageParts
+          ...PagesParts
         }
       }
     }
   }
 }
-    ${PagePartsFragmentDoc}`;
-export const GetPostDocumentDocument = gql`
-    query getPostDocument($relativePath: String!) {
-  getPostDocument(relativePath: $relativePath) {
+    ${PagesPartsFragmentDoc}`;
+export const GetColoursDocumentDocument = gql`
+    query getColoursDocument($relativePath: String!) {
+  getColoursDocument(relativePath: $relativePath) {
     sys {
       filename
       basename
@@ -379,14 +405,14 @@ export const GetPostDocumentDocument = gql`
     }
     id
     data {
-      ...PostParts
+      ...ColoursParts
     }
   }
 }
-    ${PostPartsFragmentDoc}`;
-export const GetPostListDocument = gql`
-    query getPostList {
-  getPostList {
+    ${ColoursPartsFragmentDoc}`;
+export const GetColoursListDocument = gql`
+    query getColoursList {
+  getColoursList {
     totalCount
     edges {
       node {
@@ -400,27 +426,27 @@ export const GetPostListDocument = gql`
           extension
         }
         data {
-          ...PostParts
+          ...ColoursParts
         }
       }
     }
   }
 }
-    ${PostPartsFragmentDoc}`;
+    ${ColoursPartsFragmentDoc}`;
 export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
   export function getSdk<C>(requester: Requester<C>) {
     return {
-      getPageDocument(variables: GetPageDocumentQueryVariables, options?: C): Promise<{data: GetPageDocumentQuery, variables: GetPageDocumentQueryVariables, query: string}> {
-        return requester<{data: GetPageDocumentQuery, variables: GetPageDocumentQueryVariables, query: string}, GetPageDocumentQueryVariables>(GetPageDocumentDocument, variables, options);
+      getPagesDocument(variables: GetPagesDocumentQueryVariables, options?: C): Promise<{data: GetPagesDocumentQuery, variables: GetPagesDocumentQueryVariables, query: string}> {
+        return requester<{data: GetPagesDocumentQuery, variables: GetPagesDocumentQueryVariables, query: string}, GetPagesDocumentQueryVariables>(GetPagesDocumentDocument, variables, options);
       },
-    getPageList(variables?: GetPageListQueryVariables, options?: C): Promise<{data: GetPageListQuery, variables: GetPageListQueryVariables, query: string}> {
-        return requester<{data: GetPageListQuery, variables: GetPageListQueryVariables, query: string}, GetPageListQueryVariables>(GetPageListDocument, variables, options);
+    getPagesList(variables?: GetPagesListQueryVariables, options?: C): Promise<{data: GetPagesListQuery, variables: GetPagesListQueryVariables, query: string}> {
+        return requester<{data: GetPagesListQuery, variables: GetPagesListQueryVariables, query: string}, GetPagesListQueryVariables>(GetPagesListDocument, variables, options);
       },
-    getPostDocument(variables: GetPostDocumentQueryVariables, options?: C): Promise<{data: GetPostDocumentQuery, variables: GetPostDocumentQueryVariables, query: string}> {
-        return requester<{data: GetPostDocumentQuery, variables: GetPostDocumentQueryVariables, query: string}, GetPostDocumentQueryVariables>(GetPostDocumentDocument, variables, options);
+    getColoursDocument(variables: GetColoursDocumentQueryVariables, options?: C): Promise<{data: GetColoursDocumentQuery, variables: GetColoursDocumentQueryVariables, query: string}> {
+        return requester<{data: GetColoursDocumentQuery, variables: GetColoursDocumentQueryVariables, query: string}, GetColoursDocumentQueryVariables>(GetColoursDocumentDocument, variables, options);
       },
-    getPostList(variables?: GetPostListQueryVariables, options?: C): Promise<{data: GetPostListQuery, variables: GetPostListQueryVariables, query: string}> {
-        return requester<{data: GetPostListQuery, variables: GetPostListQueryVariables, query: string}, GetPostListQueryVariables>(GetPostListDocument, variables, options);
+    getColoursList(variables?: GetColoursListQueryVariables, options?: C): Promise<{data: GetColoursListQuery, variables: GetColoursListQueryVariables, query: string}> {
+        return requester<{data: GetColoursListQuery, variables: GetColoursListQueryVariables, query: string}, GetColoursListQueryVariables>(GetColoursListDocument, variables, options);
       }
     };
   }

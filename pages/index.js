@@ -3,13 +3,28 @@ import { TinaMarkdown } from "tinacms/dist/rich-text";
 import { Layout } from "../components/Layout";
 import { useTina } from "tinacms/dist/edit-state";
 
-const query = `{
-  getPageDocument(relativePath: "home.mdx"){
-    data{
-      body
+const query = `#graphql
+query {
+  # getColoursDocument(relativePath: "colour1.json") {
+  #   data {
+  #     rgbColour
+  #   }
+  # }
+  getPagesDocument(relativePath: "page1.md") {
+    id
+    data {
+      backgroundColourDropdown
+      backgroundColourReference {
+        ...on ColoursDocument {
+          data {
+             rgbColour
+          }
+        }
+      }
     }
   }
-}`;
+}
+`;
 
 export default function Home(props) {
   // data passes though in production mode and data is updated to the sidebar data in edit-mode
@@ -19,12 +34,8 @@ export default function Home(props) {
     data: props.data,
   });
 
-  const content = data.getPageDocument.data.body;
-  return (
-    <Layout>
-      <TinaMarkdown content={content} />
-    </Layout>
-  );
+  const content = data.getPagesDocument.data;
+  return <pre>{JSON.stringify(content, null, 2)}</pre>;
 }
 
 export const getStaticProps = async () => {
@@ -35,7 +46,7 @@ export const getStaticProps = async () => {
       query,
       variables,
     });
-  } catch {
+  } catch (e) {
     // swallow errors related to document creation
   }
 

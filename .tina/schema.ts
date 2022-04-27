@@ -7,36 +7,42 @@ import { defineSchema, defineConfig } from "tinacms";
 export default defineSchema({
   collections: [
     {
-      label: "Page Content",
-      name: "page",
+      label: "Pages",
+      name: "pages",
       path: "content/page",
-      format: "mdx",
       fields: [
         {
-          name: "body",
-          label: "Main Content",
-          type: "rich-text",
-          isBody: true,
+          type: "string",
+          name: "title",
+          label: "Title",
+        },
+        {
+          type: "reference",
+          name: "backgroundColourReference",
+          label: "Background colour reference field",
+          collections: ["colours"],
+        },
+        {
+          type: "string",
+          name: "backgroundColourDropdown",
+          label: "Background colour dropdown field",
+          options: ["colour 1", "colour 2", "colour 3"],
         },
       ],
     },
     {
-      label: "Blog Posts",
-      name: "post",
-      path: "content/post",
+      label: "Colours",
+      name: "colours",
+      path: "content/colours",
+      format: "json",
       fields: [
         {
           type: "string",
-          label: "Title",
-          name: "title",
-        },
-        {
-          type: "string",
-          label: "Blog Post Body",
-          name: "body",
-          isBody: true,
+          name: "rgbColour",
+          label: "Colour",
           ui: {
-            component: "textarea",
+            component: "color",
+            colorFormat: "rgb",
           },
         },
       ],

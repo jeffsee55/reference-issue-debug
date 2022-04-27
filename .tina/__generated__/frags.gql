@@ -1,8 +1,13 @@
-fragment PageParts on Page {
-  body
+fragment PagesParts on Pages {
+  title
+  backgroundColourReference {
+    ... on Document {
+      id
+    }
+  }
+  backgroundColourDropdown
 }
 
-fragment PostParts on Post {
-  title
-  body
+fragment ColoursParts on Colours {
+  rgbColour
 }
